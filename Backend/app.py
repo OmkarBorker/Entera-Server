@@ -295,7 +295,6 @@ def authenticate():
     try:
         username = request.form['username']
         password = request.form['password']
-        print(username)
         # Fetch user from the database based on the provided username
         user = User_Data.query.filter_by(Username=username).first()
         # print(user)
