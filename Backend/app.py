@@ -17,17 +17,16 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 app = Flask(__name__)
-app.config['ALLOWED_HOSTS'] = ['192.168.0.103']
+app.config['ALLOWED_HOSTS'] = '*'
 # Configure the database connection
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:20CSE1021@NITGOA@db.poshvyujxhdsjcsvoitj.supabase.co:6543/postgres'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Omkarborker02@db.bxnpfzilplxsajvvmswg.supabase.co:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'SQL_URL'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
 def send_email_with_attachment(name, attachment_data):
-    sender_email = "testuserspace12@gmail.com"
-    receiver_email = 'doiteasy02@gmail.com'
+    sender_email = "SENDER_EMAIL"
+    receiver_email = 'TEST_EMAIL'
     subject = f'{name} Pre-Screening Form PDF'
     body = 'Please find the attached PDF.'
     
@@ -53,32 +52,6 @@ def send_email_with_attachment(name, attachment_data):
     server.send_message(msg)
     server.quit()
     
-# def generate_pdf(name, age, sex, occupation, address, history, characters, image_data):
-#     # Create a PDF document in memory
-#     buffer = io.BytesIO()
-#     c = canvas.Canvas(buffer, pagesize=letter)
-#     c.rect(0, 0, letter[0], letter[1])
-#     # Set up PDF content
-#     c.drawString(100, 750, f"Name: {name}")
-#     c.drawString(100, 730, f"Age: {age}")
-#     c.drawString(100, 710, f"Sex: {sex}")
-#     c.drawString(100, 690, f"Occupation: {occupation}")
-#     c.drawString(100, 670, f"Address: {address}")
-#     c.drawString(100, 650, f"History: {history}")
-#     c.drawString(100, 630, f"Snellen's Chart Input: {characters}")
-    
-#     # Decode the base64 image data and embed it in the PDF
-#     image_data_bytes = base64.b64decode(image_data)
-#     image_filename = f"./generated_pdfs/{name}_image.jpg"
-#     with open(image_filename, 'wb') as image_file:
-#         image_file.write(image_data_bytes)
-#     c.drawString(100,610,"Image of Eye")
-#     c.drawImage(image_filename, 100, 400, width=200, height=200)
-    
-#     c.save()
-#     pdf_data = buffer.getvalue()
-#     buffer.close()
-#     return pdf_data
 def generate_pdf(name, age, sex, occupation, address, history, character1,character2, image_data1, image_data2):
     # Create a PDF document in memory
     buffer = io.BytesIO()
@@ -354,28 +327,7 @@ def process_form():
         # Generate PDF using ReportLab
         pdf_data = generate_pdf(name, age, sex, occupation, address, history, characters1,characters2, image_data1,image_data2)
         send_email_with_attachment(name, pdf_data)
-        # pdf_filename = f"{name}_details.pdf"
-        # pdf_path = f"./generated_pdfs/{pdf_filename}"  # Adjust the path as needed
-        
-        # # Create a PDF document
-        # c = canvas.Canvas(pdf_path, pagesize=letter)
-        # c.drawString(100, 750, f"Name: {name}")
-        # c.drawString(100, 730, f"Age: {age}")
-        # c.drawString(100, 710, f"Sex: {sex}")
-        # c.drawString(100, 690, f"Occupation: {occupation}")
-        # c.drawString(100, 670, f"Address: {address}")
-        # c.drawString(100, 650, f"History: {history}")
-        # c.drawString(100, 630, f"Snellen's Chart Input: {characters}")
-        
-        # # Decode the base64 image data and save it in PDF
-        # image_data_bytes = base64.b64decode(image_data)
-        # image_filename = f"./generated_pdfs/{name}_image.jpg"
-        # with open(image_filename, 'wb') as image_file:
-        #     image_file.write(image_data_bytes)
-        # c.drawString(100,570,"Image of Eye")
-        # c.drawImage(image_filename, 100, 300, width=200, height=200)
-        
-        # c.save()
+
         return 'successful'
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=False)
+    app.run(host=HOST,debug=False)
